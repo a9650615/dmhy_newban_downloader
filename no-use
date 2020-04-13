@@ -1,0 +1,11 @@
+var data = [];
+for(var i in $('#AdvSearchTeam').options){
+  //console.log($('#AdvSearchTeam').options[i].innerText);
+  if(!isNaN(i))
+  data[i] = {
+  	name : $('#AdvSearchTeam').options[i].innerText,
+  	team_id: $('#AdvSearchTeam').options[i].value
+  };
+}
+console.log(JSON.stringify(data));
+document.body.innerHTML = '<pre>'+JSON.stringify(data)+'</pre>';
