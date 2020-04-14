@@ -29,6 +29,8 @@ export default class NewAnimeList {
         
         subList.push({
           name: Cheerio(ele).text(),
+          searchText: linkText[1],
+          searchLink: Cheerio(ele).attr('href'),
           id: linkText[2]
         });
       })

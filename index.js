@@ -6,7 +6,7 @@ import Xmldeal from './app/Xmldeal'
 import NewAnimeList from './app/NewAnimeList'
 import SubList from './config/subList'
 
-let options = {
+const options = {
 	host : 'share.dmhy.org',
 	path  : '/topics/rss/rss.xml',
 	method: 'GET'
@@ -56,16 +56,16 @@ class Main {
 		return yesterday.getDay();
 	}
 
-  searchXML( searchData = {
+  async searchXML( searchData = {
 		sortId: 2
 	} ) {
   	let sSentence = search_sentence
-  	  .replace('{keyword}', encodeURIComponent(searchData.keyword) + '+' + searchData.filter.map((data) => encodeURIComponent(data) ).join('+'))
+  	  .replace('{keyword}', (searchData.keyword) + '+' + searchData.filter.join('+'))
 			.replace('{team}', searchData.team)
 			.replace('{sort_id}', searchData.sortId ?? 0), //31 - 季度全集, 2 - 動畫
-  	opt = options;
-  	opt.path = options.path + sSentence;
-  	this.Xmldeal.request(opt);
+  	opt = Object.assign({}, options);
+  	opt.url = 'https://' + options.host + options.path + sSentence;
+  	return await this.Xmldeal.request(opt);
   }
   
 
@@ -77,18 +77,26 @@ let AnimeList = new NewAnimeList();
 console.log('今天是:'+CronDmhy.getYesterday());
 
 (async () => {
-	// await AnimeList.getNewList()
-	// const animeListOfToday = AnimeList.getListOfDay(CronDmhy.getYesterday())
+	await AnimeList.getNewList()
+	const animeListOfToday = AnimeList.getListOfDay(CronDmhy.getYesterday())
+	for(let index in animeListOfToday) {
+		const list = animeListOfToday[index]
+		const subIndex = list[3].findIndex((subTeam) => {
+			return SubList.findIndex((list) => list.id === Number(subTeam.id)) > -1
+		})
+		console.log(`（推薦：${subIndex>-1?list[3][subIndex].name: "可憐啊，沒有"}）${list[1]} - ${list[3].map((data) => `${decodeURIComponent(data.name)}(${data.id})`).join(',')}`)
+		if(subIndex>-1) {
+			console.log(list[3][subIndex].searchLink)
+			console.log(list[3][subIndex].searchText)
+			await CronDmhy.searchXML({
+				keyword : list[3][subIndex].searchText,
+				filter : [""],
+				team : list[3][0].id,
+				sortId: SORT_ID.EPISODE,
+			});
+		}
+	}
 	// animeListOfToday.forEach((list) => {
-	// 	const subIndex = list[3].findIndex((subTeam) => {
-	// 		return SubList.findIndex((list) => list.id === Number(subTeam.id)) > -1
-	// 	})
-	// 	console.log(`（推薦：${subIndex>-1?list[3][subIndex].name: "可憐啊，沒有"}）${list[1]} - ${list[3].map((data) => `${decodeURIComponent(data.name)}(${data.id})`).join(',')}`)
+		
 	// })
-	CronDmhy.searchXML({
-		keyword : "",
-		filter : ["BIG5"],
-		team : "619",
-		sortId: SORT_ID.EPISODE,
-	});
 })()
