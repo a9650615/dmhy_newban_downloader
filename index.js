@@ -60,7 +60,7 @@ class Main {
 		sortId: 2
 	} ) {
   	let sSentence = search_sentence
-  	  .replace('{keyword}', encodeURIComponent(searchData.keyword) + '+' + searchData.filter.join('+'))
+  	  .replace('{keyword}', encodeURIComponent(searchData.keyword) + '+' + searchData.filter.map((data) => encodeURIComponent(data) ).join('+'))
 			.replace('{team}', searchData.team)
 			.replace('{sort_id}', searchData.sortId ?? 0), //31 - 季度全集, 2 - 動畫
   	opt = options;
@@ -75,20 +75,20 @@ let CronDmhy = new Main();
 let AnimeList = new NewAnimeList();
 
 console.log('今天是:'+CronDmhy.getYesterday());
-// CronDmhy.searchXML({
-// 	keyword : "辉夜",
-// 	filter : [""],
-// 	team : "581",
-// 	sortId: SORT_ID.EPISODE,
-// });
 
 (async () => {
-	await AnimeList.getNewList()
-	const animeListOfToday = AnimeList.getListOfDay(CronDmhy.getYesterday())
-	animeListOfToday.forEach((list) => {
-		const subIndex = list[3].findIndex((subTeam) => {
-			return SubList.findIndex((list) => list.id === Number(subTeam.id)) > -1
-		})
-		console.log(`（推薦：${subIndex>-1?list[3][subIndex].name: "可憐啊，沒有"}）${list[1]} - ${list[3].map((data) => `${decodeURIComponent(data.name)}(${data.id})`).join(',')}`)
-	})
+	// await AnimeList.getNewList()
+	// const animeListOfToday = AnimeList.getListOfDay(CronDmhy.getYesterday())
+	// animeListOfToday.forEach((list) => {
+	// 	const subIndex = list[3].findIndex((subTeam) => {
+	// 		return SubList.findIndex((list) => list.id === Number(subTeam.id)) > -1
+	// 	})
+	// 	console.log(`（推薦：${subIndex>-1?list[3][subIndex].name: "可憐啊，沒有"}）${list[1]} - ${list[3].map((data) => `${decodeURIComponent(data.name)}(${data.id})`).join(',')}`)
+	// })
+	CronDmhy.searchXML({
+		keyword : "",
+		filter : ["BIG5"],
+		team : "619",
+		sortId: SORT_ID.EPISODE,
+	});
 })()
