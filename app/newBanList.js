@@ -3,7 +3,7 @@ import { switchMap, map, concatMap, mergeMap } from "rxjs/operators"
 import NewBanCrawler from '../lib/NewBanCrawler'
 import NewBanDatabase from '../db/NewBanDatabase'
 import NewAnimeList from '../lib/NewAnimeList'
-import CronDmhy from '../lib/CronDmhy'
+import CronDmhy, { SORT_ID } from '../lib/CronDmhy'
 import SubList from '../config/subList'
 
 const getSuggestList = (playedList) => new Promise((resolve, reject) => {
@@ -39,7 +39,26 @@ export const updateNewListOfDay = new Observable(async (observable) => {
   }
 })
 
+export const getDmhyDownloadableList = (banName = '') => new Observable(async () => {
+  console.log(banName)
+  const data = await CronDmhy.searchXML({
+    keyword : encodeURI(banName),
+    filter : [""],
+    team : '',
+    sortId: SORT_ID.EPISODE,
+  })
+  console.log(data)
+})
+
 export const getTodayUpdateList = new Observable(async (observable) => {
+  const newBanList = await NewBanDatabase.getNewBanOfDay(CronDmhy.getYesterday())
+  // console.log(newBanList)
+  for(let i in newBanList) {
+    const newBan = newBanList[i]
+    getDmhyDownloadableList(newBan.suggestName == ''? newBan.name.substring(0, 4): newBan.suggestName).subscribe(() => {
+
+    })
+  }
   // await NewAnimeList.getNewList()
   // const animeListOfToday = NewAnimeList.getListOfDay(CronDmhy.getYesterday())
 	// for(let index in animeListOfToday) {

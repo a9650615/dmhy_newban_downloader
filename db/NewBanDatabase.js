@@ -61,4 +61,10 @@ export default new class NewBanDatabase {
   async searchHasPlayedList() {
     return await db.get('newBanList').reject(['dayOfWeek', '']).value()
   }
+
+  async getNewBanOfDay(day = 0) {
+    return await db.get('newBanList').filter({
+      dayOfWeek: day,
+    }).value()
+  }
 }
