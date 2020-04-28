@@ -51,7 +51,10 @@ export default new class NewBanDatabase {
           suggestName:  this._checkIsEmpty(findItem.value().suggestName)? item.suggestName: findItem.value().suggestName
         }).write()
       } else {
-        lastQuery = lastQuery.push(item)
+        lastQuery = lastQuery.push({
+          ...item,
+          suggestName: '',
+        })
       }
     })
     await lastQuery.write()
@@ -59,7 +62,9 @@ export default new class NewBanDatabase {
   }
 
   async searchHasPlayedList() {
-    return await db.get('newBanList').reject(['dayOfWeek', '']).value()
+    return await db.get('newBanList').filter({
+      suggestName: '',
+    }).reject(['dayOfWeek', '']).value()
   }
 
   async getNewBanOfDay(day = 0) {

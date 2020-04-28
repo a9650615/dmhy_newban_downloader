@@ -12,9 +12,9 @@ const app = async () => {
   await NewBanDatabase.init()
   updateNewListOfDay.subscribe((data) => {
     // console.log(data)
-  })
-  getTodayUpdateList.subscribe((data) => {
-
+    getTodayUpdateList.subscribe((data) => {
+  
+    })
   })
 }
 // UpdateNewListOfDay.subscribe(app)

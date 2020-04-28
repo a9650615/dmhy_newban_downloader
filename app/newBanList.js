@@ -7,6 +7,7 @@ import CronDmhy, { SORT_ID } from '../lib/CronDmhy'
 import SubList from '../config/subList'
 
 const getSuggestList = (playedList) => new Promise((resolve, reject) => {
+  log.info('取得推薦清單')
   let newList = []
   from(playedList).pipe(
     mergeMap(async (data) => {
@@ -31,12 +32,14 @@ export const updateNewListOfDay = new Observable(async (observable) => {
   // observable.next()
   if (NewBanDatabase.needUpdateList()) {
     await NewBanDatabase.updateNewBanList(await NewBanCrawler.getDataFromList())
+    // Update suggest name for list
     const playedList = await NewBanDatabase.searchHasPlayedList()
     const suggestList = await getSuggestList(playedList)
     await NewBanDatabase.updateNewBanList(suggestList)
   } else {
     log.info('不需要更新')
   }
+  observable.next()
 })
 
 export const getDmhyDownloadableList = (banName = '') => new Observable(async () => {
