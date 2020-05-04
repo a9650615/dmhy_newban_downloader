@@ -4,7 +4,7 @@ import NewBanCrawler from '../lib/NewBanCrawler'
 import NewBanDatabase from '../db/NewBanDatabase'
 import NewAnimeList from '../lib/NewAnimeList'
 import CronDmhy, { SORT_ID } from '../lib/CronDmhy'
-import SubList from '../config/subList'
+import TaskManager from '../lib/TaskManager'
 
 const getSuggestList = (playedList) => new Promise((resolve, reject) => {
   log.info('取得推薦清單')
@@ -42,18 +42,33 @@ export const updateNewListOfDay = new Observable(async (observable) => {
   observable.next()
 })
 
-export const getDmhyDownloadableList = (banName = '') => new Observable(async () => {
+export const getDmhyDownloadableList = (banName = '', nameInJpn = '') => new Observable(async () => {
   console.log(banName)
+  const lastData = await TaskManager.searchLastData(nameInJpn)
+  let teamId = lastData.teamId
+
+  if (lastData == undefined || lastData.teamId == -1) { // no download data
+    teamId = await CronDmhy.searchBestTeamID(banName)
+    await TaskManager.updateInfoData(nameInJpn, {
+      teamId,
+    })
+  }
+
   const filterDate = new Date()
   filterDate.setFullYear(new Date().getFullYear() - 1)
-  const data = await CronDmhy.searchXML({
-    keyword : encodeURI(banName),
-    filter : [""],
-    team : '',
-    sortId: SORT_ID.EPISODE,
-    largeThanDate: filterDate,
-  })
-  console.log(data)
+
+  if (teamId != -1) {
+    const data = await CronDmhy.searchXML({
+      keyword : encodeURI(banName),
+      filter : [""],
+      team : teamId == -1? '': teamId.toString(),
+      sortId: SORT_ID.EPISODE,
+      largeThanDate: filterDate,
+      // largeThanEpisode: 3,
+      isCHT: true,
+    })
+    console.log(data)
+  }
 })
 
 export const getTodayUpdateList = new Observable(async (observable) => {
@@ -61,7 +76,7 @@ export const getTodayUpdateList = new Observable(async (observable) => {
   // console.log(newBanList)
   for(let i in newBanList) {
     const newBan = newBanList[i]
-    getDmhyDownloadableList(newBan.suggestName == ''? newBan.name.substring(0, 4): newBan.suggestName).subscribe(() => {
+    getDmhyDownloadableList(newBan.suggestName == undefined? newBan.name.substring(0, 4): newBan.suggestName, newBan.nameInJpn).subscribe(() => {
 
     })
   }

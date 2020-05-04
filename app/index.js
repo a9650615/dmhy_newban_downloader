@@ -1,4 +1,5 @@
 import NewBanDatabase from '../db/NewBanDatabase'
+import TaskDatabase from '../db/TaskDatabase'
 import { updateNewListOfDay, getTodayUpdateList } from './newBanList'
 import DownloadManager from '../lib/DownloadManager'
 
@@ -6,6 +7,7 @@ import DownloadManager from '../lib/DownloadManager'
 
 const app = async () => {
   await NewBanDatabase.init()
+  await TaskDatabase.init()
   updateNewListOfDay.subscribe((data) => {
     // console.log(data)
     getTodayUpdateList.subscribe((data) => {

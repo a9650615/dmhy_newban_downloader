@@ -46,5 +46,13 @@ export default [
   {
     id: 669,
     name: "喵萌奶茶屋"
+  },
+  {
+    id: 321,
+    name: "輕之國度"
+  },
+  {
+    id: 619,
+    name: "櫻都字幕組"
   }
 ]
