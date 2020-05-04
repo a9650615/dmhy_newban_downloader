@@ -44,11 +44,14 @@ export const updateNewListOfDay = new Observable(async (observable) => {
 
 export const getDmhyDownloadableList = (banName = '') => new Observable(async () => {
   console.log(banName)
+  const filterDate = new Date()
+  filterDate.setFullYear(new Date().getFullYear() - 1)
   const data = await CronDmhy.searchXML({
     keyword : encodeURI(banName),
     filter : [""],
     team : '',
     sortId: SORT_ID.EPISODE,
+    largeThanDate: filterDate,
   })
   console.log(data)
 })
