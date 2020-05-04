@@ -1,2 +1,4 @@
 node_modules/
 resource/*.json
+tmp/*
+.DS_Store
