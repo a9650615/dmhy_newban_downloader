@@ -42,10 +42,11 @@ export const updateNewListOfDay = new Observable(async (observable) => {
   observable.next()
 })
 
-export const getDmhyDownloadableList = (banName = '', nameInJpn = '') => new Observable(async () => {
-  console.log(banName)
+export const getDmhyDownloadableList = (banName = '', nameInJpn = '') => new Observable(async (obs) => {
+  // console.log(banName)
   const lastData = await TaskManager.searchLastData(nameInJpn)
-  let teamId = lastData.teamId
+  let teamId = (lastData || { teamId: -1 }).teamId
+  let largeThanEpisode = (lastData || { episode: 0 }).episode
 
   if (lastData == undefined || lastData.teamId == -1) { // no download data
     teamId = await CronDmhy.searchBestTeamID(banName)
@@ -64,11 +65,16 @@ export const getDmhyDownloadableList = (banName = '', nameInJpn = '') => new Obs
       team : teamId == -1? '': teamId.toString(),
       sortId: SORT_ID.EPISODE,
       largeThanDate: filterDate,
-      // largeThanEpisode: 3,
+      largeThanEpisode,
       isCHT: true,
     })
-    console.log(data)
+    
+    data.forEach((banList) => {
+      TaskManager.addDownloadTask(nameInJpn, banList)
+    })
   }
+
+  obs.complete()
 })
 
 export const getTodayUpdateList = new Observable(async (observable) => {
@@ -77,7 +83,7 @@ export const getTodayUpdateList = new Observable(async (observable) => {
   for(let i in newBanList) {
     const newBan = newBanList[i]
     getDmhyDownloadableList(newBan.suggestName == undefined? newBan.name.substring(0, 4): newBan.suggestName, newBan.nameInJpn).subscribe(() => {
-
+      // after finish
     })
   }
   // await NewAnimeList.getNewList()

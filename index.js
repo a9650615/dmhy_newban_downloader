@@ -2,7 +2,7 @@ import log4js from 'log4js'
 const logger = log4js.getLogger()
 
 global.log = logger// Inject log tool
-global.logData = logger// Inject log tool
+global.logger = log4js// Inject log tool
 log.level = 'debug'
 
 const app = require('./app').default

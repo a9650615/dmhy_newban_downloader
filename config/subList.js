@@ -52,7 +52,11 @@ export default [
     name: "輕之國度"
   },
   {
+    id: 604,
+    name: "cc動漫"
+  },
+  {
     id: 619,
     name: "櫻都字幕組"
-  }
+  },
 ]

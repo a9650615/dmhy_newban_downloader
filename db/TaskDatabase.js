@@ -1,6 +1,8 @@
 import LowDb from 'lowdb'
 import FileAsync from 'lowdb/adapters/FileAsync'
 
+const log = logger.getLogger('TaskDatabase')
+
 const adapter = new FileAsync('resource/TaskDB.json', {
   defaultValue: {
     lastUpdate: 0,
@@ -8,6 +10,13 @@ const adapter = new FileAsync('resource/TaskDB.json', {
     downloadList: [],
   }
 })
+
+export const DOWNLOAD_STATUS = {
+  PAUSE: 0,
+  WAITING: 1,
+  DOWNLOADING: 2,
+  FINISH: 3,
+}
 
 let db
 
@@ -18,7 +27,7 @@ export default new class TaskDataBase {
 
   async init() {
     db = (await LowDb(adapter))
-    log.info('TaskDataBase: DB finish')
+    log.info('DB finish')
   }
 
   async updateBanInfo(nameInJpn = '', data = { teamId: -1 }) {
@@ -35,8 +44,26 @@ export default new class TaskDataBase {
     }
   }
 
-  async addTask({  }) {
-
+  async addTask(nameInJpn, { link, episode, isCHT, magnet, name }, maxEpisode) {
+    const query = db.get('downloadList').find({ link })
+    if (query.value() == undefined) {
+      const banInfo = db.get('banList').find({ nameInJpn }).value()
+      db.get('downloadList').push({
+        nameInJpn,
+        episode,
+        isCHT,
+        magnet,
+        name,
+        link,
+        status: DOWNLOAD_STATUS.WAITING,
+      }).write()
+      log.info('Added: ',name, episode, maxEpisode, banInfo.episode)
+      if (maxEpisode > banInfo.episode) {
+        this.updateBanInfo(nameInJpn, {
+          episode: maxEpisode,
+        })
+      }
+    }
   }
 
   async searchBanTaskInfo(nameInJpn = '') {
