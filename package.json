@@ -6,6 +6,7 @@
   "scripts": {
     "start": "babel index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel . -d build",
     "dev": "babel-watch index.js"
   },
   "author": "birdyo",

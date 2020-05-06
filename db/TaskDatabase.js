@@ -69,4 +69,16 @@ export default new class TaskDataBase {
   async searchBanTaskInfo(nameInJpn = '') {
     return await db.get('banList').find({ nameInJpn }).value()
   }
+
+  async getDownloadingList() {
+    return await db.get('downloadList').filter({ status: DOWNLOAD_STATUS.DOWNLOADING }).value()
+  }
+
+  async getDownloadableList(limit = 5) {
+    return await db.get('downloadList').filter({ status: DOWNLOAD_STATUS.WAITING }).take(limit).value()
+  }
+
+  async updateTask(link, assignData) {
+    return await db.get('downloadList').find({ link }).assign(assignData).write()
+  }
 }
