@@ -14,8 +14,9 @@ const adapter = new FileAsync('resource/TaskDB.json', {
 export const DOWNLOAD_STATUS = {
   PAUSE: 0,
   WAITING: 1,
-  DOWNLOADING: 2,
-  FINISH: 3,
+  SEEKING: 2,
+  DOWNLOADING: 3,
+  FINISH: 4,
 }
 
 let db
@@ -75,11 +76,15 @@ export default new class TaskDataBase {
   }
 
   async getDownloadableList(limit = 5) {
-    return await db.get('downloadList').filter({ status: DOWNLOAD_STATUS.WAITING }).take(limit).value()
+    return await db.get('downloadList').filter(({status}) => status == DOWNLOAD_STATUS.WAITING || status == status.SEEKING).take(limit).value()
   }
 
   async getTaskByHashInfo(infoHash) {
     return await db.get('downloadList').filter({ infoHash }).first().value()
+  }
+
+  async removeTaskByHashInfo(infoHash) {
+    return await db.get('downloadList').remove({ infoHash }).write()
   }
 
   async updateTask(link, assignData) {

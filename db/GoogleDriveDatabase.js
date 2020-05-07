@@ -9,6 +9,7 @@ const adapter = new FileAsync('resource/GDDB.json', {
     seasonFolder: {},
     mappingFolder: [],
     uploadList: [],
+    uploadingData: null,
   }
 })
 
@@ -56,19 +57,28 @@ export default new class TaskDataBase {
     return await db.get('seasonFolder').set(season, folderId).write()
   }
 
-  async addUploadTask({ nameInJpn, files }) {
-    files.map((file) => {
-      const query = db.get('uploadList').find({ file })
+  async addUploadTask({ nameInJpn, files, name, infoHash }) {
+    const query = db.get('uploadList').find({ name })
+    const uploading = await db.get('uploadingData').value() || { infoHash: null }
+    if (query.value() == undefined && uploading.infoHash != infoHash) {
+      db.get('uploadList').push({
+        nameInJpn,
+        name,
+        files,
+        infoHash
+      }).write()
+      log.info('Added to upload list: ', name)
+     
+    }
+  }
 
-      if (query.value() == undefined) {
-        db.get('uploadList').push({
-          nameInJpn,
-          file,
-        }).write()
-        log.info('Added to upload list: ', nameInJpn, file)
-       
-      }
-    })
+  async uploadFromWaitingList() {
+    const nowUploading = await db.get('uploadingData').value()
+    if (nowUploading == null) {
+      const query = await (db.get('uploadList').first())
+      await db.set('uploadingData', query.value()).write()
+      await db.get('uploadList').remove({ infoHash: query.value().infoHash }).write()
+    }
   }
 
 }
