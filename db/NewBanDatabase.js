@@ -72,4 +72,10 @@ export default new class NewBanDatabase {
       dayOfWeek: day,
     }).value()
   }
+
+  async getNewBanByJpnName(nameInJpn) {
+    return await db.get('newBanList').filter({
+      nameInJpn
+    }).first().value()
+  }
 }

@@ -10,15 +10,15 @@ import UploadGD from '../lib/UploadGD'
 const app = async () => {
   await NewBanDatabase.init()
   await TaskDatabase.init()
-  updateNewListOfDay.subscribe((data) => {
-    // console.log(data)
-    getTodayUpdateList.subscribe((data) => {
   await GoogleDriveDatabase.init()
   await UploadGD.init()
   DownloadManager.start()
+  // updateNewListOfDay.subscribe((data) => {
+  //   // console.log(data)
+  //   getTodayUpdateList.subscribe((data) => {
   
-    })
-  })
+  //   })
+  // })
 }
 // UpdateNewListOfDay.subscribe(app)
 

@@ -78,6 +78,10 @@ export default new class TaskDataBase {
     return await db.get('downloadList').filter({ status: DOWNLOAD_STATUS.WAITING }).take(limit).value()
   }
 
+  async getTaskByHashInfo(infoHash) {
+    return await db.get('downloadList').filter({ infoHash }).first().value()
+  }
+
   async updateTask(link, assignData) {
     return await db.get('downloadList').find({ link }).assign(assignData).write()
   }
