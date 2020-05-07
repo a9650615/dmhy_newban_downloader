@@ -20,7 +20,7 @@
     "lowdb": "^1.0.0",
     "rxjs": "^6.5.5",
     "shelljs": "^0.6.0",
-    "webtorrent-hybrid": "^4.0.1",
+    "webtorrent": "^0.108.1",
     "xml2js": "^0.4.16"
   },
   "devDependencies": {
