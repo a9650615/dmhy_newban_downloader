@@ -81,4 +81,8 @@ export default new class TaskDataBase {
   async updateTask(link, assignData) {
     return await db.get('downloadList').find({ link }).assign(assignData).write()
   }
+
+  async updateTaskByHash(infoHash, assignData) {
+    return await db.get('downloadList').find({ infoHash }).assign(assignData).write()
+  }
 }
