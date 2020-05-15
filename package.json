@@ -20,6 +20,7 @@
     "log4js": "^6.2.0",
     "lowdb": "^1.0.0",
     "mime-types": "^2.1.27",
+    "rimraf": "^3.0.2",
     "rxjs": "^6.5.5",
     "shelljs": "^0.6.0",
     "webtorrent": "^0.108.1",

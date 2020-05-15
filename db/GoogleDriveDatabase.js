@@ -78,13 +78,19 @@ export default new class TaskDataBase {
     const nowUploading = await db.get('uploadingData').value()
     if (nowUploading == null) {
       const query = await (db.get('uploadList').first())
-      await db.set('uploadingData', query.value()).write()
-      await db.get('uploadList').remove({ infoHash: query.value().infoHash }).write()
+      if (query.value()) {
+        await db.set('uploadingData', query.value()).write()
+        await db.get('uploadList').remove({ infoHash: query.value().infoHash }).write()
+      }
     }
   }
 
   async getNowUploadingData() {
     return await db.get('uploadingData').value()
+  }
+
+  async removeUploadData() {
+    return await db.set('uploadingData', null).write()
   }
 
   async setUploadFileFolderMapping(folderData = []) {
