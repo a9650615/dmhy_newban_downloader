@@ -23,7 +23,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.5",
     "shelljs": "^0.6.0",
-    "webtorrent": "^0.108.1",
+    "webtorrent": "0.108.3",
     "xml2js": "^0.4.16"
   },
   "devDependencies": {
