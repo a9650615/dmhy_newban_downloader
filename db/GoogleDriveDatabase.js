@@ -67,6 +67,7 @@ export default new class TaskDataBase {
         files,
         infoHash,
         folderMap: [],
+        uploadStatus: files.map((file) => ({ path: file, finish: false })),
       }).write()
       log.info('Added to upload list: ', name)
      
@@ -103,6 +104,12 @@ export default new class TaskDataBase {
   async updateFolderIdOfFileFolderMapping(path, folderId) {
     return await db.get('uploadingData.folderMap').find({ path }).assign({
       folderId
+    }).write()
+  }
+
+  async setUploadStatusFinish(path) {
+    return await db.get('uploadingData.uploadStatus').find({ path }).assign({
+      finish: true,
     }).write()
   }
 
