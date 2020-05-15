@@ -65,7 +65,8 @@ export default new class TaskDataBase {
         nameInJpn,
         name,
         files,
-        infoHash
+        infoHash,
+        folderMap: [],
       }).write()
       log.info('Added to upload list: ', name)
      
@@ -79,6 +80,30 @@ export default new class TaskDataBase {
       await db.set('uploadingData', query.value()).write()
       await db.get('uploadList').remove({ infoHash: query.value().infoHash }).write()
     }
+  }
+
+  async getNowUploadingData() {
+    return await db.get('uploadingData').value()
+  }
+
+  async setUploadFileFolderMapping(folderData = []) {
+    for(let index in folderData) {
+      const folder = folderData[index]
+      const folderDB = this.getFolderMapByPath(folder.path)
+      if (folderDB == undefined) {
+        db.get('uploadingData.folderMap').push(folder).write()
+      }
+    }
+  }
+
+  getFolderMapByPath(path) {
+    return db.get('uploadingData.folderMap').find({ path }).value()
+  }
+
+  async updateFolderIdOfFileFolderMapping(path, folderId) {
+    return await db.get('uploadingData.folderMap').find({ path }).assign({
+      folderId
+    }).write()
   }
 
 }
