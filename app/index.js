@@ -13,12 +13,12 @@ const app = async () => {
   await GoogleDriveDatabase.init()
   await UploadGD.init()
   DownloadManager.start()
-  // updateNewListOfDay.subscribe((data) => {
-  //   // console.log(data)
-  //   getTodayUpdateList.subscribe((data) => {
+  updateNewListOfDay.subscribe((data) => {
+    // console.log(data)
+    getTodayUpdateList.subscribe((data) => {
   
-  //   })
-  // })
+    })
+  })
 }
 // UpdateNewListOfDay.subscribe(app)
 
