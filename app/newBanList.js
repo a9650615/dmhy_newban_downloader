@@ -78,7 +78,8 @@ export const getDmhyDownloadableList = (banName = '', nameInJpn = '') => new Obs
 })
 
 export const getTodayUpdateList = new Observable(async (observable) => {
-  const newBanList = await NewBanDatabase.getNewBanOfDay(CronDmhy.getYesterday())
+  const newBanList = (await NewBanDatabase.getNewBanOfDay(CronDmhy.getYesterday())) || []
+  log.info(`取得星期 ${CronDmhy.getYesterday()} 的動漫共: `, newBanList.length)
   // console.log(newBanList)
   for(let i in newBanList) {
     const newBan = newBanList[i]
