@@ -1,5 +1,5 @@
 import TaskDatabase from '../db/TaskDatabase'
-import DownloadManager from '../lib/DownloadManager'
+import DownloadManager from './DownloadManager'
 
 export default new class TaskManager {
   async searchLastData(nameInJpn = '') {

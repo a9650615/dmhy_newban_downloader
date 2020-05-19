@@ -13,8 +13,8 @@ const options = {
 };
 
 let config = {
-	listfile : 'config/list.json',
-	groupsfile: 'config/groups.json'
+	listfile : 'src/config/list.json',
+	groupsfile: 'src/config/groups.json'
 };
 
 let search_sentence = "?keyword={keyword}&sort_id={sort_id}&team_id={team}&order=date-desc";

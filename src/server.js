@@ -3,6 +3,7 @@
 // } = require('worker_threads')
 import Koa from 'koa'
 import serve from 'koa-static'
+import cors from '@koa/cors'
 const log = logger.getLogger('API SERVER')
 const app = new Koa()
 
@@ -17,6 +18,7 @@ const LOGTYPE = {
 // console.log('started', workerData)
 // parentPort.postMessage({type: LOGTYPE.INFO, message: 'api server 已啟動'})
 
+app.use(cors())
 app.use(serve(__dirname  + '/resource'))
 
 app.use(async (ctx, next) => {

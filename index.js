@@ -17,8 +17,8 @@ global.log = logger// Inject log tool
 global.logger = log4js// Inject log tool
 log.level = 'debug'
 
-const app = require('./app').default
-const server = require('./server').default
+const app = require('./src/app').default
+const server = require('./src/server').default
 
 // const openServer = () => {
 // 	const log = log4js.getLogger('ServerMessage')

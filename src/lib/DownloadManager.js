@@ -1,6 +1,6 @@
 import WebTorrent from 'webtorrent'
 import TaskDatabase, { DOWNLOAD_STATUS } from '../db/TaskDatabase'
-import UploadGD from '../lib/UploadGD'
+import UploadGD from './UploadGD'
 
 
 const log = logger.getLogger('DownloadManager')
