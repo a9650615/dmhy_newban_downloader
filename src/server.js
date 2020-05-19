@@ -17,9 +17,8 @@ const LOGTYPE = {
 
 // console.log('started', workerData)
 // parentPort.postMessage({type: LOGTYPE.INFO, message: 'api server 已啟動'})
-
 app.use(cors())
-app.use(serve(__dirname  + '/resource'))
+app.use(serve(process.cwd() + '/resource'))
 
 app.use(async (ctx, next) => {
 	await next();
