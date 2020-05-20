@@ -4,8 +4,14 @@
 import Koa from 'koa'
 import serve from 'koa-static'
 import cors from '@koa/cors'
+import webSocket from './webSocket'
 const log = logger.getLogger('API SERVER')
 const app = new Koa()
+
+const server = require('http').createServer(app.callback())
+const io = require('socket.io')(server)
+
+webSocket.setIo(io)
 
 // logger
 const LOGTYPE = {
@@ -43,7 +49,7 @@ app.use(async ctx => {
 
 class ApiServer {
 	constructor() {
-		app.listen(env.parsed.PORT, () => {
+		server.listen(env.parsed.PORT, () => {
 			log.info(`API server has listen on port:${env.parsed.PORT}`)
 		})
 	}

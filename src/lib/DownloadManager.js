@@ -1,6 +1,7 @@
 import WebTorrent from 'webtorrent'
 import TaskDatabase, { DOWNLOAD_STATUS } from '../db/TaskDatabase'
 import UploadGD from './UploadGD'
+import WebSocket, { METHOD_TYPE } from '../webSocket'
 
 
 const log = logger.getLogger('DownloadManager')
@@ -60,6 +61,11 @@ export default new class DownloadManager {
     this.downloader.torrents.forEach(async (torrent) => {
       // console.log(torrent.infoHash)
       console.log((torrent.progress * 100).toFixed(2))
+      WebSocket.broadcast(METHOD_TYPE.UPDATE_DOWNLOAD_STATUS, {
+        infoHash: torrent.infoHash,
+        progress: (torrent.progress * 100).toFixed(2),
+        ...await TaskDatabase.getTaskByHashInfo(torrent.infoHash),
+      })
       if (torrent.done) {
         log.debug('Finished:', torrent.infoHash)
         // TaskDatabase.updateTaskByHash(torrent.infoHash, {
@@ -69,6 +75,9 @@ export default new class DownloadManager {
         UploadGD.prepareToUpload(data)
         await TaskDatabase.removeTaskByHashInfo(torrent.infoHash)
         this.downloader.remove(torrent.infoHash)
+        WebSocket.broadcast(METHOD_TYPE.FINISH_DOWNLOAD_ITEM, {
+          infoHash: torrent.infoHash,
+        })
       }
     })
     // console.log(formatBytes(this.downloader.downloadSpeed))
