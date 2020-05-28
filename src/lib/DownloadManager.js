@@ -60,7 +60,6 @@ export default new class DownloadManager {
     if (this.downloader == undefined) return
     this.downloader.torrents.forEach(async (torrent) => {
       // console.log(torrent.infoHash)
-      console.log((torrent.progress * 100).toFixed(2))
       WebSocket.broadcast(METHOD_TYPE.UPDATE_DOWNLOAD_STATUS, {
         infoHash: torrent.infoHash,
         progress: (torrent.progress * 100).toFixed(2),

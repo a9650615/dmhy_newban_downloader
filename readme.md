@@ -3,6 +3,10 @@
 可以自動抓取動漫列表，並且去動漫花園載新番
 如有任何疑問，可以參考此[部落格](https://blog.bgpsekai.club/newban-auto-downloader-intro)會補充更加詳細的功能
 
+環境
+---
+[NodeJS](https://nodejs.org/en/)
+
 如何使用
 ---
 請先複製專案內的 `.env` 改成 `.env.production` 並設定 OPEN_API=true 和 PORT 指定為你想要的 (可以連接 webui 用)
