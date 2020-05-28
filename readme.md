@@ -26,3 +26,8 @@
 ![](https://imgur.com/S3GpQQb.jpg)
 
 最後就會開始執行拉
+
+TODO
+---
+- [ ] 提供管理 API
+- [ ] 自動刪除已完結的番相關紀錄
