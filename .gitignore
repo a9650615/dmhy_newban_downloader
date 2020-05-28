@@ -3,3 +3,4 @@ resource/*.json
 tmp/*
 .DS_Store
 build
+.env.*

@@ -157,8 +157,8 @@ export default new class UploadGD {
   }
 
   async createSeasonFolder(season) {
-    const sea = season.match(/(\d{4})(\d)/)
-    const folderID = await this.createFolderRecord(`${sea[1]} 年 ${sea[2]} 月`)
+    const sea = season.match(/(\d{4})(\d{2})/)
+    const folderID = await this.createFolderRecord(`${sea[1]} 年 ${parseInt(sea[2])} 月`)
     await GoogleDriveDatabase.setSeasonFolder(season, folderID)
     return folderID
   }

@@ -48,6 +48,10 @@ export default [
     name: "喵萌奶茶屋"
   },
   {
+    id: 657,
+    name: "LoliHouse"
+  },
+  {
     id: 321,
     name: "輕之國度"
   },
