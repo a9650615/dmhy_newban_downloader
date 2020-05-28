@@ -3,8 +3,10 @@ import log4js from 'log4js'
 import dotenv from 'dotenv'
 let env
 
+console.log(process.env.NODE_ENV)
 if (process.env && process.env.NODE_ENV) {
-  env = dotenv.config({path: '.env.' + process.env.NODE_ENV})
+	env = dotenv.config({path: '.env.' + process.env.NODE_ENV.trim()})
+	console.log(env)
 } else {
   env = dotenv.config({path: '.env.development'})
 }
