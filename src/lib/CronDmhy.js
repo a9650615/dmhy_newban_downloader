@@ -1,6 +1,7 @@
 import fs from 'fs';
 import Xmldeal from './Xmldeal'
 import Axios from 'axios'
+import Hooman from 'hooman'
 import Cheerio from 'cheerio'
 import SubList from '../config/subList'
 import TaskManager from './TaskManager'
@@ -95,7 +96,7 @@ export default new class CronDmhy {
 	}
 
 	async searchDmhyList(url, largeThanEpisode = 0, largeThanDate = null, isCHT = false) {
-		const htmlData = (await Axios.get(url)).data
+		const htmlData = (await Hooman.get(url)).body
 		const $ = Cheerio.load(htmlData)
 		const dataList = []
 		$('.tablesorter>tbody>tr').each((index, element) => {
