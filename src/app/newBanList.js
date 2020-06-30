@@ -5,6 +5,7 @@ import NewBanDatabase from '../db/NewBanDatabase'
 import NewAnimeList from '../lib/NewAnimeList'
 import CronDmhy, { SORT_ID } from '../lib/CronDmhy'
 import TaskManager from '../lib/TaskManager'
+import WebSocket, { METHOD_TYPE } from '../webSocket'
 
 const getSuggestList = (playedList) => new Promise((resolve, reject) => {
   log.info('取得推薦清單')
@@ -71,6 +72,11 @@ export const getDmhyDownloadableList = (banName = '', nameInJpn = '') => new Obs
     
     data.forEach((banList) => {
       TaskManager.addDownloadTask(nameInJpn, banList)
+      // broadcast
+      WebSocket.broadcast(METHOD_TYPE.START_DOWNLOAD, {
+        ...banList,
+        status: 1,
+      })
     })
   }
 
