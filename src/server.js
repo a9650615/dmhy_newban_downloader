@@ -1,14 +1,24 @@
 // const {
 // 	workerData, parentPort
 // } = require('worker_threads')
+import fs from 'fs'
+import path from 'path'
 import Koa from 'koa'
 import serve from 'koa-static'
 import cors from '@koa/cors'
 import webSocket from './webSocket'
 const log = logger.getLogger('API SERVER')
 const app = new Koa()
+let server
+if (env.parsed.FORCE_HTTPS) {
+	server = require('https').createServer({
+		cert: fs.readFileSync(path.resolve(__dirname, '../resource/certificate.pem')),
+		key: fs.readFileSync(path.resolve(__dirname, '../resource/privatekey.pem'))
+	}, app.callback())
+} else {
+	server = require('http').createServer(app.callback())
+}
 
-const server = require('http').createServer(app.callback())
 const io = require('socket.io')(server)
 
 webSocket.setIo(io)
@@ -50,7 +60,7 @@ app.use(async ctx => {
 class ApiServer {
 	constructor() {
 		server.listen(env.parsed.PORT, () => {
-			log.info(`API server has listen on port:${env.parsed.PORT}`)
+			log.info(`API server has listen on port:${env.parsed.PORT}, HTTPS: ${env.parsed.FORCE_HTTPS}`)
 		})
 	}
 }
