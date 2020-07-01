@@ -1,10 +1,12 @@
-import fs from 'fs';
+import fs from 'fs'
 import Xmldeal from './Xmldeal'
 import Axios from 'axios'
 import Hooman from 'hooman'
 import Cheerio from 'cheerio'
 import SubList from '../config/subList'
 import TaskManager from './TaskManager'
+
+const log = logger.getLogger('CronDmhy')
 
 const options = {
 	host : 'share.dmhy.org',
@@ -96,6 +98,7 @@ export default new class CronDmhy {
 	}
 
 	async searchDmhyList(url, largeThanEpisode = 0, largeThanDate = null, isCHT = false) {
+		log.info('正在 Dmhy 查詢列表中: ', url)
 		const htmlData = (await Hooman.get(url)).body
 		const $ = Cheerio.load(htmlData)
 		const dataList = []

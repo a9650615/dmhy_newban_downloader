@@ -7,6 +7,8 @@ import CronDmhy, { SORT_ID } from '../lib/CronDmhy'
 import TaskManager from '../lib/TaskManager'
 import WebSocket, { METHOD_TYPE } from '../webSocket'
 
+const log = logger.getLogger('NewBanList')
+
 const getSuggestList = (playedList) => new Promise((resolve, reject) => {
   log.info('取得推薦清單')
   let newList = []
@@ -89,7 +91,8 @@ export const getTodayUpdateList = new Observable(async (observable) => {
   // console.log(newBanList)
   for(let i in newBanList) {
     const newBan = newBanList[i]
-    getDmhyDownloadableList(newBan.suggestName == undefined? newBan.name.substring(0, 4): newBan.suggestName, newBan.nameInJpn).subscribe(() => {
+    log.info(`取得動漫: ${newBan.name}/${newBan.suggestName} 中`)
+    getDmhyDownloadableList(newBan.suggestName == '' || newBan.suggestName == undefined? newBan.name.substring(0, 4): newBan.suggestName, newBan.nameInJpn).subscribe(() => {
       // after finish
     })
   }
