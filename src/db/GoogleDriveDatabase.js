@@ -1,5 +1,6 @@
 import LowDb from 'lowdb'
 import FileAsync from 'lowdb/adapters/FileAsync'
+import BaseDataBase from './_baseDatabase'
 
 const log = logger.getLogger('Google Drive Database')
 
@@ -15,14 +16,15 @@ const adapter = new FileAsync('resource/GDDB.json', {
 
 let db
 
-export default new class TaskDataBase {
-  constructor() {
+export default new class TaskDataBase extends BaseDataBase {
+  // constructor() {
     
-  }
+  // }
 
   async init() {
     db = (await LowDb(adapter))
     log.info('DB finish')
+    super.init()
   }
 
   async getRootFolderId() {
@@ -91,6 +93,10 @@ export default new class TaskDataBase {
 
   async removeUploadData() {
     return await db.set('uploadingData', null).write()
+  }
+
+  async removeUploadTaskByNameInJpn(nameInJpn) {
+    await db.get('uploadList').remove({ nameInJpn }).write()
   }
 
   async setUploadFileFolderMapping(folderData = []) {

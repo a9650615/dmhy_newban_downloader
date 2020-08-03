@@ -31,7 +31,12 @@
 
 最後就會開始執行拉
 
+啟動 HTTPS
+---
+如果再 env 檔內設定 `FORCE_HTTPS=true` 的話，需要將憑證 ( `certificate.pem` 和 `privatekey.pem` ) 放到 `/build/resource` 中才能正常執行
+
 TODO
 ---
-- [ ] 提供管理 API
+- [x] 提供[管理 API](https://github.com/a9650615/dmhy_newban_downloader_webui)
+- [x] 手動刪除已完結新番紀錄 ( 沒有防呆，不能刪除當季的動漫，不然會出問題 )
 - [ ] 自動刪除已完結的番相關紀錄

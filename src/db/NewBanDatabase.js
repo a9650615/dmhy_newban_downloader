@@ -1,5 +1,6 @@
 import LowDb from 'lowdb'
 import FileAsync from 'lowdb/adapters/FileAsync'
+import BaseDataBase from './_baseDatabase'
 
 const adapter = new FileAsync('resource/NewBanDB.json', {
   defaultValue: {
@@ -9,14 +10,14 @@ const adapter = new FileAsync('resource/NewBanDB.json', {
 })
 let db
 
-export default new class NewBanDatabase {
-  constructor() {
-    
-  }
+export default new class NewBanDatabase extends BaseDataBase {
+  // constructor() {
+  // }
 
   async init() {
     db = (await LowDb(adapter))
     log.info('db finish')
+    super.init()
   }
 
   needUpdateList() {
@@ -77,5 +78,9 @@ export default new class NewBanDatabase {
     return await db.get('newBanList').filter({
       nameInJpn
     }).first().value()
+  }
+
+  async removeByNameInJpn(nameInJpn) {
+    return await db.get('newBanList').remove({ nameInJpn }).write()
   }
 }

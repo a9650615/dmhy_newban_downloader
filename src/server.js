@@ -7,10 +7,12 @@ import Koa from 'koa'
 import serve from 'koa-static'
 import cors from '@koa/cors'
 import webSocket from './webSocket'
+
 const log = logger.getLogger('API SERVER')
 const app = new Koa()
 let server
-if (env.parsed.FORCE_HTTPS) {
+
+if (env.parsed.FORCE_HTTPS == 'true') {
 	server = require('https').createServer({
 		cert: fs.readFileSync(path.resolve(__dirname, '../resource/certificate.pem')),
 		key: fs.readFileSync(path.resolve(__dirname, '../resource/privatekey.pem'))

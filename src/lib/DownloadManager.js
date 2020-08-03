@@ -88,6 +88,13 @@ export default new class DownloadManager {
     // console.log(torrent.infoHash)
     // this.downloader.remove(torrent.infoHash)
   }
+
+  removeTask(infoHash) {
+    if (this.downloader.torrents.find((torr) => torr.infoHash == infoHash) == undefined) return
+    this.downloader.remove(infoHash, (err) => {
+      log.warn(err)
+    })
+  }
   
   downloadFile(torrent) {
     this.downloader.add(

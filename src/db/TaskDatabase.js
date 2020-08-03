@@ -1,5 +1,6 @@
 import LowDb from 'lowdb'
 import FileAsync from 'lowdb/adapters/FileAsync'
+import BaseDataBase from './_baseDatabase'
 
 const log = logger.getLogger('TaskDatabase')
 
@@ -21,14 +22,15 @@ export const DOWNLOAD_STATUS = {
 
 let db
 
-export default new class TaskDataBase {
-  constructor() {
+export default new class TaskDataBase extends BaseDataBase {
+  // constructor() {
     
-  }
+  // }
 
   async init() {
     db = (await LowDb(adapter))
     log.info('DB finish')
+    super.init()
   }
 
   async updateBanInfo(nameInJpn = '', data = { teamId: -1 }) {
@@ -67,6 +69,10 @@ export default new class TaskDataBase {
     }
   }
 
+  async searchTaskFromDownloadList(nameInJpn = '') {
+    return await db.get('downloadList').filter({ nameInJpn }).value()
+  }
+
   async searchBanTaskInfo(nameInJpn = '') {
     return await db.get('banList').find({ nameInJpn }).value()
   }
@@ -81,6 +87,14 @@ export default new class TaskDataBase {
 
   async getTaskByHashInfo(infoHash) {
     return await db.get('downloadList').filter({ infoHash }).first().value()
+  }
+
+  async removeTaskByNameInJpn(nameInJpn) {
+    return await db.get('downloadList').remove({ nameInJpn }).write()
+  }
+
+  async removeBanDataByNameInJpn(nameInJpn) {
+    return await db.get('banList').remove({ nameInJpn }).write()
   }
 
   async removeTaskByHashInfo(infoHash) {
