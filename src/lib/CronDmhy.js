@@ -9,7 +9,7 @@ import TaskManager from './TaskManager'
 const log = logger.getLogger('CronDmhy')
 
 const options = {
-	host : 'share.dmhy.org',
+	host : 'dmhy.anoneko.com', // default: share.dmhy.org
 	// path  : '/topics/rss/rss.xml', //xml path
 	path  : '/topics/list', //xml path
 	method: 'GET'
