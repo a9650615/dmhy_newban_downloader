@@ -99,6 +99,10 @@ export default new class TaskDataBase extends BaseDataBase {
     await db.get('uploadList').remove({ nameInJpn }).write()
   }
 
+  async removeMappingFolderByNameInJpn(nameInJpn) {
+    await db.get('mappingFolder').remove({ nameInJpn }).write()
+  }
+
   async setUploadFileFolderMapping(folderData = []) {
     for(let index in folderData) {
       const folder = folderData[index]

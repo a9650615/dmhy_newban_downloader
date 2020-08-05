@@ -38,12 +38,15 @@ export default new class WebSocket {
 
 	bindEvents(socket) {
 		socket.on('editBangumi', (data) => {
-			console.log('start')
+			console.log('start', data)
 		})
 
-		socket.on('deleteBangumi', (data) => {
+		socket.on('deleteBangumi', (data, callback) => {
 			log.info(`deleteBangumi: ${JSON.stringify(data)}`)
 			finishBangumi(data.nameInJpn)
+			if (callback instanceof Function) {
+				callback({ status: 1 })
+			}
 		})
 	}
 }

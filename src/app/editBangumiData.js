@@ -22,6 +22,7 @@ export const finishBangumi = async (nameInJpn) => {
     TaskDatabase.removeBanDataByNameInJpn(nameInJpn)
     NewBanDatabase.removeByNameInJpn(nameInJpn)
     GoogleDriveDatabase.removeUploadTaskByNameInJpn(nameInJpn)
+    GoogleDriveDatabase.removeMappingFolderByNameInJpn(nameInJpn)
   }
 }
 
