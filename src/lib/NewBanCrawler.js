@@ -45,13 +45,13 @@ export default new class NewBanCrawler {
         }
       }
       res.push({
-          name: $(elem).find('.entity_localized_name').text(),
+          name: $(elem).find('.anime_content > .anime_names > .entity_localized_name').text(),
           dayOfWeek,        
           date,                  
           time,             
           carrier: {原創作品: "Original",漫畫改編: "Comic",小說改編: "Novel",遊戲改編: "Game",改編作品: "Original"}[$(elem).find('.anime_tag tags').text()]||"Original",                
           season:  `${bangumiTitle[1]}${bangumiTitle[2].padStart(2, 0)}`,                   
-          nameInJpn: $(elem).find('.entity_original_name').text(),      
+          nameInJpn: $(elem).find('.anime_content > .anime_names > .entity_original_name').text(),
           img: $(elem).find('.anime_cover_image').attr("acgs-img-data-url"),
           official: $(elem).find('.anime_links a')?$(elem).find('.anime_links a').attr('href'):'',     
           description: $(elem).find('.anime_story')?$(elem).find('.anime_story').text():"",
