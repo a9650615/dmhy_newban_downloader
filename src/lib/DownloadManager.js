@@ -97,13 +97,23 @@ export default new class DownloadManager {
       log.warn(err)
     })
   }
+
+  // parse tracker from magnet like &tr=https://opentracker.acgnx.se/announce
+  parseTrackerFromMagnet(magnet) {
+    const decodedMagnet = decodeURIComponent(magnet)
+    const trackers = [ ...decodedMagnet.matchAll(/&tr=([a-zA-Z:\\//.\:\/0-9\-\_]*)/g) ]
+
+    return trackers.map((trackData) => trackData[1])
+  }
   
   downloadFile(torrent) {
+    console.log('download')
     this.downloader.add(
-      torrent,
+      decodeURIComponent(torrent),
       {
         path: process.cwd() + '/tmp',
-        announce: trackerList,
+        announce: [ ...trackerList, ...this.parseTrackerFromMagnet(torrent)],
+        maxWebConns: 20,
       },
       // (torr) => { console.log(torr.infoHash) }
     )
@@ -111,7 +121,8 @@ export default new class DownloadManager {
 
   _setTaskInfo = (torr, link) => {
     // console.log('finish')
-    // console.log(torr)
+    // console.log(torr.infoHash)
+    this.downloader.remove(torr.infoHash) // stop download
     log.debug('Get files of:', link)
     const files = torr.files.map((file) => {
      return file.path
@@ -121,15 +132,19 @@ export default new class DownloadManager {
       infoHash: torr.infoHash,
       status: DOWNLOAD_STATUS.DOWNLOADING,
     })
-    this.downloader.remove(torr.infoHash)
   }
 
   // Pre fetch infoHash from magnet
   addFileToList(torrent, link) {
+    // still fetch hash info
+    if (this.downloader.get(torrent) !== null) {
+      return 
+    }
     this.downloader.add(
-      torrent,
+      decodeURIComponent(torrent),
       {
         path: process.cwd() + '/tmp',
+        announce: [ ...trackerList, ...this.parseTrackerFromMagnet(torrent)],
       },
       (torr) => this._setTaskInfo(torr, link)
     )
@@ -158,7 +173,7 @@ export default new class DownloadManager {
 
   async downloadFromWaitingList() {
     const orderList = 3
-    const downloadingList = (await TaskDatabase.getDownloadingList()) || []
+    const downloadingList = (await TaskDatabase.getDownloadableList()) || []
     const torrentList = this.downloader.torrents.map((torr) => torr.infoHash)
     if (downloadingList.length < orderList) {
       const downloadableList = await TaskDatabase.getDownloadableList(orderList - downloadingList.length)
