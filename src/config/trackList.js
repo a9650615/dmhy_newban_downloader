@@ -1,0 +1,15 @@
+export default [
+  'http://nyaa.tracker.wf:7777/announce',
+  'udp://open.stealth.si:80/announce',
+  'udp://tracker.opentrackr.org:1337/announce',
+  'udp://tracker.coppersurfer.tk:6969/announce',
+  'udp://exodus.desync.com:6969/announce',
+  'http://opentracker.acgnx.se/announce',
+  'http://104.28.16.69/announce',
+  'http://open.acgtracker.com:1096/announce',
+  'http://tracker.openbittorrent.com:80/announce',
+  'http://tracker.publicbt.com:80/announce',
+  'http://opentracker.acgnx.com:6869/announce',
+  'http://t.nyaatracker.com/announce',
+  'https://opentracker.acgnx.se/announce',
+]

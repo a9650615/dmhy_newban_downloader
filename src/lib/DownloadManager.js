@@ -2,6 +2,7 @@ import WebTorrent from 'webtorrent'
 import TaskDatabase, { DOWNLOAD_STATUS } from '../db/TaskDatabase'
 import UploadGD from './UploadGD'
 import WebSocket, { METHOD_TYPE } from '../webSocket'
+import trackerList from '../config/trackList'
 
 
 const log = logger.getLogger('DownloadManager')
@@ -41,6 +42,7 @@ function formatBytes(bytes, decimals = 2) {
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
 export default new class DownloadManager {
   downloader
   chunkStore = new chunkStore()
@@ -101,6 +103,7 @@ export default new class DownloadManager {
       torrent,
       {
         path: process.cwd() + '/tmp',
+        announce: trackerList,
       },
       // (torr) => { console.log(torr.infoHash) }
     )
@@ -121,6 +124,7 @@ export default new class DownloadManager {
     this.downloader.remove(torr.infoHash)
   }
 
+  // Pre fetch infoHash from magnet
   addFileToList(torrent, link) {
     this.downloader.add(
       torrent,
