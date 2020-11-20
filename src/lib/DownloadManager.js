@@ -65,6 +65,7 @@ export default new class DownloadManager {
       WebSocket.broadcast(METHOD_TYPE.UPDATE_DOWNLOAD_STATUS, {
         infoHash: torrent.infoHash,
         progress: (torrent.progress * 100).toFixed(2),
+        downloadSpeed: formatBytes(torrent.downloadSpeed),
         ...await TaskDatabase.getTaskByHashInfo(torrent.infoHash),
       })
       if (torrent.done) {
@@ -107,7 +108,6 @@ export default new class DownloadManager {
   }
   
   downloadFile(torrent) {
-    console.log('download')
     this.downloader.add(
       decodeURIComponent(torrent),
       {
