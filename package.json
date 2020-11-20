@@ -32,7 +32,7 @@
     "rxjs": "^6.5.5",
     "shelljs": "^0.6.0",
     "socket.io": "^2.3.0",
-    "webtorrent": "0.108.3",
+    "webtorrent": "^0.111.0",
     "xml2js": "^0.4.16"
   },
   "devDependencies": {
