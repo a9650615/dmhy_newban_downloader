@@ -272,7 +272,7 @@ export default new class UploadGD {
       folder = await this.createSeasonFolder(banData.season)
     }
     if(!banFolder) {
-      const banFolderID = await this.createFolderRecord(`${banData.name} / ${banData.nameInJpn} (${banData.season})`, banData.description, folder)
+      const banFolderID = await this.createFolderRecord(`${banData.name} | ${banData.nameInJpn} (${banData.season})`, banData.description, folder)
       GoogleDriveDatabase.setMappingFolder(banData.nameInJpn, banFolderID, banData.season)
     }
     GoogleDriveDatabase.addUploadTask(data)
