@@ -81,6 +81,10 @@ export default new class TaskDataBase extends BaseDataBase {
     return await db.get('downloadList').filter({ status: DOWNLOAD_STATUS.DOWNLOADING }).value()
   }
 
+  async getSeekingList() {
+    return await db.get('downloadList').filter(({status}) => status == DOWNLOAD_STATUS.SEEKING).value()
+  }
+
   async getDownloadableList(limit = 0) {
     if (limit == 0) {
       return await db.get('downloadList').filter(({status}) => status == DOWNLOAD_STATUS.WAITING || status == DOWNLOAD_STATUS.SEEKING).value()

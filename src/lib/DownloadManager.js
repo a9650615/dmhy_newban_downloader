@@ -108,6 +108,7 @@ export default new class DownloadManager {
   }
   
   downloadFile(torrent) {
+    // console.log('download')
     this.downloader.add(
       decodeURIComponent(torrent),
       {
@@ -144,7 +145,7 @@ export default new class DownloadManager {
       decodeURIComponent(torrent),
       {
         path: process.cwd() + '/tmp',
-        announce: [ ...trackerList, ...this.parseTrackerFromMagnet(torrent)],
+        announce: [ ...trackerList ],
       },
       (torr) => this._setTaskInfo(torr, link)
     )
@@ -152,6 +153,7 @@ export default new class DownloadManager {
 
   start() {
     log.debug('Download task started')
+    this.restoreSeeking()
     setInterval(() => {
       this.downloadFromDownloadList()
       this.downloadFromWaitingList()
@@ -168,6 +170,13 @@ export default new class DownloadManager {
         })
         this.downloadFile(item.magnet, item.link)
       }
+    })
+  }
+
+  async restoreSeeking() {
+    const seekingList = await TaskDatabase.getSeekingList()
+    seekingList.forEach((item) => {
+      this.addFileToList(item.magnet, item.link, item.name)
     })
   }
 
