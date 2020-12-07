@@ -123,7 +123,6 @@ export default new class DownloadManager {
   _setTaskInfo = (torr, link) => {
     // console.log('finish')
     // console.log(torr.infoHash)
-    this.downloader.remove(torr.infoHash) // stop download
     log.debug('Get files of:', link)
     const files = torr.files.map((file) => {
      return file.path
@@ -133,6 +132,7 @@ export default new class DownloadManager {
       infoHash: torr.infoHash,
       status: DOWNLOAD_STATUS.DOWNLOADING,
     })
+    this.downloader.remove(torr.infoHash) // stop download
   }
 
   // Pre fetch infoHash from magnet
@@ -145,7 +145,7 @@ export default new class DownloadManager {
       decodeURIComponent(torrent),
       {
         path: process.cwd() + '/tmp',
-        announce: [ ...trackerList ],
+        announce: [ ...trackerList, ...this.parseTrackerFromMagnet(torrent) ],
       },
       (torr) => this._setTaskInfo(torr, link)
     )
@@ -182,7 +182,7 @@ export default new class DownloadManager {
 
   async downloadFromWaitingList() {
     const orderList = 3
-    const downloadingList = (await TaskDatabase.getDownloadableList()) || []
+    const downloadingList = (await TaskDatabase.getDownloadingList()) || []
     const torrentList = this.downloader.torrents.map((torr) => torr.infoHash)
     if (downloadingList.length < orderList) {
       const downloadableList = await TaskDatabase.getDownloadableList(orderList - downloadingList.length)
