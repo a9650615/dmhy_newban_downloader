@@ -18,7 +18,7 @@
     "cheerio": "^1.0.0-rc.3",
     "cron": "^1.1.0",
     "dotenv": "^8.2.0",
-    "googleapis": "39",
+    "googleapis": "66",
     "got": "^11.3.0",
     "hooman": "^1.2.5",
     "koa": "^2.12.0",
